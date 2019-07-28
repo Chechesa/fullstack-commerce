@@ -2,29 +2,27 @@ var express = require('express');
 var cors = require('cors');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-// var multer = require('multer');
 var app = express();
-// var upload = multer();
 
 // Conectamos a Mongo
 mongoose.connect('mongodb://localhost/tienda');
-// app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-// app.use(upload.array());
 
 var productoSchema = mongoose.Schema({
     sku: String,
     nombre: String,
     descripcion: String,
     imagen: String,
+    precio: Number,
     existencia: Number
 });
 var Producto = mongoose.model("Producto", productoSchema);
 
 var usuarioSchema = mongoose.Schema({
     usuario: String,
+    email: String,
     password: String,
     token: String
 })
@@ -32,11 +30,9 @@ var Usuario = mongoose.model('Usuario', usuarioSchema);
 
 var pedidoSchema = mongoose.Schema({
     usuario: String,
-    productos: [String],
+    productos: [Object],
     total: Number
 })
-
-// let db = mongoose.connection;
 
 app.get('/productos', function (req,res) {
     Producto.find(function (err,response) {
@@ -44,6 +40,16 @@ app.get('/productos', function (req,res) {
             console.log(err);
         } else {
             res.json(response)
+        }
+    })
+})
+
+app.get('/productos/ver/:id', function (req,res) {
+    Producto.findById(req.params.id, function (err, producto) {
+        if (!producto) {
+            res.status(404).send('no se han encontrado datos');
+        } else {
+            res.json(producto);
         }
     })
 })
@@ -106,9 +112,8 @@ app.post('/productos/actualizar/:id', function (req, res) {
                 })
                 .catch(err => {
                     res.status(400).send('error al actualizar la base de datos');
-                })
+                });
         }
-
     })
 
 })

@@ -11,3 +11,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+header nav {
+  background: #282c34;
+}
+
+header nav ul {
+  padding: 0;
+  text-align: center;
+}
+
+header nav ul li {
+  background: white;
+  padding: 0px 1px;
+  display: inline-block;
+}
+
+header nav ul li a {
+  /*border: 1px solid purple;*/
+  background: lavender;
+  display: inline-block;
+  padding: 10px 20px;
+}
+
+header nav ul li a.active {
+  background: #fec;
+}
+
+header nav ul li a:hover {
+  background: #edf;
+}

@@ -14,6 +14,7 @@ class Productos extends Component {
         this.onChangeProductoNombre = this.onChangeProductoNombre.bind(this);
         this.onChangeProductoDescripcion = this.onChangeProductoDescripcion.bind(this);
         this.onChangeProductoImagen = this.onChangeProductoImagen.bind(this);
+        this.onChangeProductoPrecio = this.onChangeProductoPrecio.bind(this);
         this.onChangeProductoExistencia = this.onChangeProductoExistencia.bind(this);
 
         this.agregarProducto = this.agregarProducto.bind(this);
@@ -24,6 +25,7 @@ class Productos extends Component {
             nombre: '',
             descripcion: '',
             imagen: '',
+            precio: '',
             existencia: '',
         };
     }
@@ -33,35 +35,36 @@ class Productos extends Component {
     onChangeProductoSKU(e) {
         this.setState({
                 sku: e.target.value
-
         });
     }
 
     onChangeProductoNombre(e) {
         this.setState({
                 nombre: e.target.value
-
         });
     }
 
     onChangeProductoDescripcion(e) {
         this.setState({
                 descripcion: e.target.value
-
         });
     }
 
     onChangeProductoImagen(e) {
         this.setState({
                 imagen: e.target.value
+        });
+    }
 
+    onChangeProductoPrecio(e) {
+        this.setState({
+            precio: e.target.value
         });
     }
 
     onChangeProductoExistencia(e) {
         this.setState({
                 existencia: e.target.value
-
         });
     }
 
@@ -83,28 +86,16 @@ class Productos extends Component {
             .then(res => {
                 console.log(res.data);
                 this.setState({
-                        sku: '',
-                        nombre: '',
-                        descripcion: '',
-                        imagen: '',
-                        existencia: ''
+                    sku: '',
+                    nombre: '',
+                    descripcion: '',
+                    imagen: '',
+                    precio: '',
+                    existencia: ''
                 })
                 window.location.reload()
             });
-
-
-        // document.getElementById('target').addEventListener('click', function () {
-        //     window.location.reload()
-        // })
     }
-
-    // productoRow() {
-    //     return this.state.data.map(function (producto, i) {
-    //
-    //     })
-    // }
-
-
 
     render() {
         // const { data } = this.state;
@@ -116,7 +107,7 @@ class Productos extends Component {
                 <div>
                     <p>Listado</p>
                     <div>
-                        <table>
+                        <table className={'table'}>
                             <tbody>
                         {this.state.data.length <= 0
                         ? <tr><td>Aún no hay productos para mostrar</td></tr>
@@ -171,6 +162,16 @@ class Productos extends Component {
                             <div className={'form-group'}>
                                 <input
                                     type={'number'}
+                                    name={'precio'}
+                                    placeholder={'Precio al público'}
+                                    className={'form-control'}
+                                    value={this.state.precio}
+                                    onChange={this.onChangeProductoPrecio}
+                                    required/>
+                            </div>
+                            <div className={'form-group'}>
+                                <input
+                                    type={'number'}
                                     name={'existencia'}
                                     placeholder={'Cantidad en existencia'}
                                     className={'form-control'}
@@ -192,23 +193,13 @@ class Productos extends Component {
     }
 
     getDataFromDb = () => {
-        // fetch('http://localhost:4000/productos', { mode: 'cors' })
-        //     .then((data) => data.json())
-        //     .then((res) => {
-        //         console.log(res);
-        //         this.setState({ data: res.data })
-        //         // window.location.href = '/';
-        //     })
-
         axios.get('http://localhost:4000/productos')
             .then(response => {
-                // console.log('Hola');
-                // console.log(response);
                 this.setState({ data: response.data });
             })
             .catch(function (err) {
                 console.log(err);
-            })
+            });
     }
 
 }

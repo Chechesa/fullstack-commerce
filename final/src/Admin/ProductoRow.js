@@ -45,15 +45,16 @@ class ProductoRow extends Component {
 
     render() {
         return (
-            <tr key={this.props.producto._id}>
-                <td>{this.props.producto.sku}<br/>{this.props.producto.nombre}</td>
-                <td>{this.props.producto.descripcion}</td>
-                <td>{this.props.producto.imagen}</td>
+            <tr key={this.props.producto._id} className={'align-top'}>
+                <td><strong>{this.props.producto.sku}</strong><br/>{this.props.producto.nombre}</td>
+                <td style={{'white-space': 'pre-wrap'}}>{this.props.producto.descripcion}</td>
+                <td><img src={this.props.producto.imagen} style={{'min-width':'100px', width: '80%'}} /></td>
                 <td>
                     <input type={'hidden'} name={'_id'} value={this.props.producto._id} />
                     <input name={'existencia'}
                            value={this.state.existencia}
                            onChange={this.onChangeProductoExistencia}
+                           className={'w-50'}
                     />
                     <button onClick={this.actualizarProducto} className={'btn btn-primary'}>Actualizar</button>
 
