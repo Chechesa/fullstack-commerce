@@ -3,6 +3,7 @@ var cors = require('cors');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app = express();
+var bcrypt = require('bcryptjs');
 
 // Conectamos a Mongo
 mongoose.connect('mongodb://localhost/tienda');
@@ -30,9 +31,17 @@ var Usuario = mongoose.model('Usuario', usuarioSchema);
 
 var pedidoSchema = mongoose.Schema({
     usuario: String,
-    productos: [Object],
+    email: String,
+    productos: [{
+            sku: String,
+            nombre: String,
+            descripcion: String,
+            imagen: String,
+            precio: Number,
+        }],
     total: Number
 })
+var Pedido = mongoose.model('Pedido', pedidoSchema);
 
 app.get('/productos', function (req,res) {
     Producto.find(function (err,response) {
@@ -115,18 +124,85 @@ app.post('/productos/actualizar/:id', function (req, res) {
                 });
         }
     })
-
-})
+});
 
 app.get('/productos/borrar/:id', function (req, res) {
     Producto.findByIdAndRemove({_id: req.params.id}, function (err, producto) {
         if (err) res.json(err);
         else res.json('registro borrado exitosamente');
     });
+});
+
+
+app.get('/pedidos', function (req,res) {
+    Pedido.find(function (err,response) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(response)
+        }
+    })
 })
 
+app.get('/pedidos/ver/:id', function (req,res) {
+    Pedido.findById(req.params.id, function (err, pedido) {
+        if (!pedido) {
+            res.status(404).send('no se han encontrado datos');
+        } else {
+            res.json(pedido);
+        }
+    })
+})
 
-// Puerto 8085 para evitar conflictos
+app.post('/pedidos/agregar', function (req, res) {
+    let pedido = new Pedido(req.body);
+    pedido.save()
+        .then(pedido => {
+            res.status(200).json({'pedido': 'pedido guardado exitosamente'})
+        })
+        .catch(err => {
+            res.status(400).send('error al guardar en la base de datos');
+        });
+})
+
+app.get('/usuarios', function (req,res) {
+    Usuario.find(function (err,response) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(response)
+        }
+    })
+})
+
+// Cambiar por post y crear token
+app.post('/usuario/validar', function (req,res) {
+    Usuario.findById(req.params.id, function (err, usuario) {
+        if (!usuario) {
+            res.status(404).send('no se han encontrado datos');
+        } else {
+            let u = {
+                usuario: usuario.usuario,
+                email: usuario.email,
+                token: usuario.token
+            }
+            res.json(u);
+        }
+    })
+})
+
+app.post('/usuarios/agregar', function (req, res) {
+    let usuario = new Usuario(req.body);
+    usuario.save()
+        .then(usuario => {
+            res.status(200).json({'usuario': 'usuario guardado exitosamente'})
+        })
+        .catch(err => {
+            res.status(400).send('error al guardar en la base de datos');
+        });
+})
+
+// Puerto 4000 para evitar conflictos
 var servidor = app.listen(4000, function () {
     console.log('Servicios activos...')
-})
+});

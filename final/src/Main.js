@@ -12,6 +12,14 @@ import Productos from "./Admin/Productos";
 import Admin from "./Admin/Admin";
 import ProductoDetalle from "./ProductoDetalle";
 import Carrito from "./Carrito";
+import Checkout from "./Checkout";
+import Pedidos from "./Admin/Pedidos";
+import Registro from "./Registro";
+
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+console.log(cookies.get('u'));
+console.log(cookies.get('t'));
 
 class Main extends Component {
     constructor(props) {
@@ -37,8 +45,8 @@ class Main extends Component {
     render() {
         return(
             <HashRouter>
-                <header className={'col'}>
-                    <div><h1>Tienda de Rompecabezas</h1></div>
+                <header>
+                    <div className={'col'}><h1>Tienda de Rompecabezas 3D</h1></div>
                     <nav>
                         <ul>
                             <li><NavLink to={'/'}>Inicio</NavLink></li>
@@ -52,9 +60,12 @@ class Main extends Component {
                     <div className={'row'}>
                         <div className={'col'}>
                             <Route exact path={"/"} component={Home}/>
-                            <Route path={"/admin"} component={Admin}/>
                             <Route path={"/carrito"} component={Carrito}/>
+                            <Route path={"/checkout"} component={Checkout}/>
+                            <Route path={"/registro"} component={Registro}/>
                             <Route path={"/producto/:id"} component={ProductoDetalle}/>
+                            <Route path={"/admin"} component={Admin}/>
+                            <Route path={"/admin/pedidos"} component={Pedidos}/>
                             <Route path={"/admin/productos"} component={Productos}/>
                         </div>
                     </div>

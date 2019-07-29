@@ -41,3 +41,34 @@ header nav ul li a.active {
 header nav ul li a:hover {
   background: #edf;
 }
+
+nav#panel-menu {
+    padding: 0;
+    text-align: center;
+}
+
+nav#panel-menu ul {
+    padding: 0;
+    text-align: center;
+}
+
+nav#panel-menu ul li {
+    background: white;
+    padding: 0px 1px;
+    display: inline-block;
+}
+
+nav#panel-menu ul li a {
+    /*border: 1px solid purple;*/
+    background: lavender;
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+nav#panel-menu ul li a.active {
+    background: #fec;
+}
+
+nav#panel-menu ul li a:hover {
+    background: #edf;
+}

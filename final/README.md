@@ -24,6 +24,7 @@ Colecciones: productos y usuarios
 - Detalle de producto
 - Carrito de compras
 - Panel de productos
+- Creación de pedidos
 
 
 

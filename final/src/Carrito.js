@@ -7,7 +7,6 @@ class Carrito extends Component {
     constructor(props) {
         super(props)
 
-        this.realizarPedido = this.realizarPedido.bind(this);
         this.vaciarCarrito = this.vaciarCarrito.bind(this);
 
         this.state = {
@@ -21,15 +20,13 @@ class Carrito extends Component {
     }
 
     vaciarCarrito() {
-        let carrito = JSON.parse(localStorage.carrito);
-        carrito.total = 0;
-        carrito.productos = [];
-        localStorage.carrito = JSON.stringify(carrito);
-        window.location.reload();
-    }
-
-    realizarPedido() {
-
+         if (window.confirm('¿Estás seguro de vaciar el carrito?')) {
+            let carrito = JSON.parse(localStorage.carrito);
+            carrito.total = 0;
+            carrito.productos = [];
+            localStorage.carrito = JSON.stringify(carrito);
+            window.location.reload();
+        }
     }
 
     render() {
@@ -38,7 +35,8 @@ class Carrito extends Component {
                 <h2>Carrito</h2>
                 {this.state.carrito.productos.length <= 0 ? '' :
                     <div>
-                        <div className={'text-right'}><Link to={'/'}>Continuar comprando</Link> <button onClick={this.realizarPedido}>Realizar pedido</button></div>
+                        <div className={'text-right'}><Link to={'/'}>Continuar comprando</Link>
+                            <Link to={'/checkout'} className={'btn btn-primary'}>Realizar pedido</Link></div>
                     </div>
                 }
                 {this.state.carrito.productos.length <= 0
@@ -53,7 +51,7 @@ class Carrito extends Component {
                         </div>
                     ))}
                     <hr />
-                <div><Link onClick={this.vaciarCarrito}>Vaciar carrito</Link></div>
+                <div><button onClick={this.vaciarCarrito} className={'btn btn-danger'}>Vaciar carrito</button></div>
                 <div className={'col text-right'}><strong>Total: $ {this.state.carrito.total.toFixed(2)}</strong></div>
             </div>
         );

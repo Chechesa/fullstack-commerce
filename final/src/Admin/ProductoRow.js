@@ -48,8 +48,8 @@ class ProductoRow extends Component {
             <tr key={this.props.producto._id} className={'align-top'}>
                 <td><strong>{this.props.producto.sku}</strong><br/>{this.props.producto.nombre}</td>
                 <td style={{'white-space': 'pre-wrap'}}>{this.props.producto.descripcion}</td>
-                <td><img src={this.props.producto.imagen} style={{'min-width':'100px', width: '80%'}} /></td>
-                <td>
+                <td><img src={this.props.producto.imagen} style={{minWidth:'100px', width: '80%'}} /></td>
+                <td className={'text-center'}>
                     <input type={'hidden'} name={'_id'} value={this.props.producto._id} />
                     <input name={'existencia'}
                            value={this.state.existencia}
