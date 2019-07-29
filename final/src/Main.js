@@ -15,6 +15,7 @@ import Carrito from "./Carrito";
 import Checkout from "./Checkout";
 import Pedidos from "./Admin/Pedidos";
 import Registro from "./Registro";
+import Login from "./Login";
 
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
@@ -25,10 +26,17 @@ class Main extends Component {
     constructor(props) {
         super(props)
 
+        // this.logout = this.logout.bind(this);
+
         this.state = {
             carrito: { total: 0,
                 productos: []},
         };
+    }
+
+    logout() {
+        cookies.set('u');
+        cookies.set('t');
     }
 
     componentDidMount() {
@@ -51,7 +59,12 @@ class Main extends Component {
                         <ul>
                             <li><NavLink to={'/'}>Inicio</NavLink></li>
                             <li><NavLink to={'/carrito'}>Carrito{(this.state.carrito.productos.length <= 0 ? '' : ' ('+this.state.carrito.productos.length+')')}</NavLink></li>
-                            <li><NavLink to={'/registro'}>Únete</NavLink></li>
+                            {(cookies.get('u') == 'undefined') ?
+                                <li><NavLink to={'/registro'}>Únete</NavLink></li>
+                                :
+                                <li><NavLink to={'/'} onClick={this.logout}>Cerrar sesión ({cookies.get('u')})</NavLink></li>
+                            }
+
                         </ul>
                     </nav>
                 </header>
@@ -63,6 +76,7 @@ class Main extends Component {
                             <Route path={"/carrito"} component={Carrito}/>
                             <Route path={"/checkout"} component={Checkout}/>
                             <Route path={"/registro"} component={Registro}/>
+                            <Route path={"/login"} component={Login}/>
                             <Route path={"/producto/:id"} component={ProductoDetalle}/>
                             <Route path={"/admin"} component={Admin}/>
                             <Route path={"/admin/pedidos"} component={Pedidos}/>

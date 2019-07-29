@@ -177,18 +177,38 @@ app.get('/usuarios', function (req,res) {
 
 // Cambiar por post y crear token
 app.post('/usuario/validar', function (req,res) {
-    Usuario.findById(req.params.id, function (err, usuario) {
+    var obj = {
+        usuario: req.body.usuario
+    }
+
+    Usuario.findOne(obj, function (err, usuario) {
         if (!usuario) {
-            res.status(404).send('no se han encontrado datos');
+            res.status(404).send('error de acceso');
         } else {
-            let u = {
-                usuario: usuario.usuario,
-                email: usuario.email,
-                token: usuario.token
+            if (bcrypt.compareSync(req.body.password, usuario.password)) {
+                let r = new Usuario(usuario);
+                r.token = req.body.token;
+                r.save()
+                    .then(usu => {
+                        console.log('sesión iniciada en el usuario ' + usu.usuario + ' con el id ' + usu._id);
+                        let u = {
+                            usuario: usu.usuario,
+                            email: usu.email,
+                            token: usu.token
+                        }
+                        res.json(u);
+                    })
+                    .catch(err => {
+                        res.status(404).send('error de acceso');
+                    })
+            } else{
+                res.status(404).send('error de acceso');
             }
-            res.json(u);
         }
     })
+        .catch(err => {
+            res.status(404).send('error de acceso');
+        })
 })
 
 app.post('/usuarios/agregar', function (req, res) {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 class Checkout extends Component {
     constructor(props) {
@@ -25,7 +27,11 @@ class Checkout extends Component {
 
     realizarPedido() {
         let pedido = JSON.parse(localStorage.carrito);
-        pedido.usuario = '';
+        if (cookies.get('u') != 'undefined') {
+            pedido.usuario = cookies.get('u');
+        } else {
+            pedido.usuario = '';
+        }
         pedido.email = '';
 
         this.setState({pedido: pedido});
